@@ -82,3 +82,28 @@ let players = [{
 
 let see = show(players);
 console.log(see);
+
+// now tryin the same using the filter 
+
+function show2(arr){
+const result = arr.filter(players1 => players1.age>18 && players1.gender=='male')
+return result;
+}
+
+let players1= [{
+    name: 'chitransh',
+    age: 19,
+    gender: 'male'
+},{
+    name: 'romi',
+     age: 24,
+     gender: 'female'
+},{
+     name: 'ajay',
+     age: 12,
+     gender: 'male'
+}
+];
+
+let see2 = show2(players1);
+console.log(see2);
