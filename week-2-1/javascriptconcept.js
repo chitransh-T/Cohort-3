@@ -46,14 +46,14 @@ console.log(res);
 
 // let see how the tasks is being executed
 
-console.log("first log");
+console.log("first log");   // 1st this execute  
 
-console.log("second log");
+console.log("second log");  // 2nd this execute
 
 function print3(){
-    console.log("third log from the function")
+    console.log("third log from the function")   // last this get execute
 }
 
 setTimeout(print3 , 3000);
 
-console.log("last")
+console.log("last")       // 3rd this execute
