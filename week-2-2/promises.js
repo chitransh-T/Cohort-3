@@ -122,7 +122,7 @@ async function getAllUsers(){
 getAllUsers();
 
 
-// now writing the same function using teh .then and .catch 
+// now writing the same function using the .then and .catch syntax
 
 fetch("https://jsonplaceholder.typicode.com/users")
 .then(function(responce){
