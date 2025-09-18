@@ -11,7 +11,7 @@ function addTodo(){
     const divEl = document.createElement("div");
     divEl.setAttribute('id' , ctr)
   
-    divEl.innerHTML ="<div>" + ctr +'. ' + value +'</div> <button onClick="deletetodo(' + ctr + ')">delete</delete>'
+    divEl.innerHTML ="<div>" + ctr +'. ' + value +'</div> <button onClick="deletetodo(' + ctr + ')">delete</button>'
     const parenetEl =   document.querySelector("body");
     parenetEl.appendChild(divEl);   
       ctr = ctr + 1;
