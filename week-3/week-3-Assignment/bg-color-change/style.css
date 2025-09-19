@@ -1,0 +1,72 @@
+#main{
+    background-color: rgb(255, 255, 255);
+     height: 100vh;
+     width: 100vw;
+    
+}
+
+#btn-container{
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    font-size: larger;
+    background: #ebe7e7;
+    padding: 20px;
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+    border-radius: 20px;
+}
+
+#def{
+    background: rgb(135, 122, 122);
+    padding: 20px;
+    border-radius: 10px;
+    font: 900;
+    cursor: pointer;
+}
+
+#btn1{
+    background: #ff0000;
+    padding: 20px;
+    border-radius: 10px;
+    font: 900;
+    cursor: pointer;
+}
+#btn2{
+    background: blue;
+    padding: 20px;
+    border-radius: 10px;
+    font: 900;
+    cursor: pointer;
+}
+#btn3{
+    background: green;
+    padding: 20px;
+    border-radius: 10px;
+    font: 900;
+    cursor: pointer;
+}
+#btn4{
+    background: yellow;
+    padding: 20px;
+    border-radius: 10px;
+    font: 900;
+    cursor: pointer;
+}
+
+#btn5{
+    background: pink;
+    padding: 20px;
+    border-radius: 10px;
+    font: 900;
+    cursor: pointer;
+}
+#btn6{
+    background: purple;
+    padding: 20px;
+    border-radius: 10px;
+    font: 900;
+    cursor: pointer;
+}
+
