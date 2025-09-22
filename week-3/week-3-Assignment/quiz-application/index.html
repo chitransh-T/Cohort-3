@@ -8,24 +8,35 @@
 </head>
 <body>
     
-  <div id="quiz-container">
-    <h3>Fun Quiz</h3>
+  
 
-    <div id="quiz">
-        <div id="questions"></div>
-        <ul id="options"></ul>
+    <div id="quiz-container">
+        <h2 id="question">Question tag</h2>
+       
+        <ul id="options">
+            <li>
+          <input type="radio" class="answer" id="option a" name="quiz-options">
+          <label for="option a" id="text_option-a">Option A</label>
+          </li>
 
-        <div id="buttons">
-            <button id="next">Next</button>
-            <button id="submit">Submit</button>
-        </div>
-    </div>
+            <li>
+          <input type="radio" class="answer" id="option b" name="quiz-options">
+          <label for="option b" id="text_option-b">Option B</label>
+          </li>
 
-    <div id="result" style="display: none;">
-        <h2 id="scoretext"></h2>
-        <button id="restart">Restart</button>
-    </div>
-    </div>
+            <li>
+          <input type="radio" class="answer" id="option c" name="quiz-options">
+          <label for="option c" id="text_option-c">Option C</label>
+          </li>
+
+            <li>
+          <input type="radio" class="answer" id="option d" name="quiz-options">
+          <label for="option d" id="text_option-d">Option D</label>
+          </li>
+        </ul>
+          <button id="submit">Submit</button>
+   
+</div>
 
     <script src="script.js"></script>
     <script src="data.js"></script>
