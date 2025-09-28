@@ -23,7 +23,7 @@ app.get("/ride1" , isOldEnoughMiddleware , function(req,res){     // we can indi
 
 app.get("/ride2" ,isOldEnoughMiddleware, function(req,res){
     res.json({
-        msg: "your ride2 is booked"
+        msg: "your ride2 is booked you can go for it"
     })
 })
 
