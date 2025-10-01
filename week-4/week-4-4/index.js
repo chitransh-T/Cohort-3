@@ -17,13 +17,13 @@ app.use(isOldEnoughMiddleware);     // instead if individually calling middlewar
 
 app.get("/ride1" , isOldEnoughMiddleware , function(req,res){     // we can individually call the middleware with each endpoint
     res.json({
-        msg: "your ride1 is booked you can go for it"
+        msg: "your ride1 is booked "
     })
 })
 
 app.get("/ride2" ,isOldEnoughMiddleware, function(req,res){
     res.json({
-        msg: "your ride2 is booked you can go for it"
+        msg: "your ride2 is booked "
     })
 })
 
