@@ -15,7 +15,7 @@ function isOldEnoughMiddleware(req,res,next){
 
 app.use(isOldEnoughMiddleware);     // instead if individually calling middleware we can just call it once above all the endpoint for which we have to make it applicable
 
-app.get("/ride1" , isOldEnoughMiddleware , function(req,res){     // we can individually call the middleware with each endpoint
+app.get("/ride1" , isOldEnoughMiddleware , function(req,res){     // we can individually call the middleware with every point
     res.json({
         msg: "your ride1 is booked "
     })
