@@ -6,7 +6,7 @@ app.use(express.json());
 
 const users = [];
 
-//signin and signup apis
+
 
 app.post("/signup",function(req,res){
    
