@@ -7,7 +7,7 @@ app.use(express.json());
 const users = [];
 
 
-
+// signup api 
 app.post("/signup",function(req,res){
    
     const name = req.body.username;
@@ -22,11 +22,11 @@ app.post("/signup",function(req,res){
         msg:"you are registered"
     })
 })
-
+// signin api
 app.post("/signin",function(req,res){
      const name = req.body.username;
      const password = req.body.password;
-
+    
    
    
 
