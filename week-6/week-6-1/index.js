@@ -7,7 +7,7 @@ app.use(express.json());
 const users = [];
 
 
-// signup api 
+// signup API
 app.post("/signup",function(req,res){
    
     const name = req.body.username;
