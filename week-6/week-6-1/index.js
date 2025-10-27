@@ -52,7 +52,7 @@ app.post("/signin",function(req,res){
 
 app.get("/me" , function(req,res){
     const token = req.headers.token;
-    let getuser = [];
+    let getuser = [];                // to store the username ans password in this variable
 
     for(let i = 0 ; i<=users.length;i++){
         if(users[i].token == token){
