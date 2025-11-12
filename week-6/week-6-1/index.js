@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
-
-
+const JWT = require('jsonwebtoken');
+const JWT_SECRET = "pass1212";
 app.use(express.json());
 
 const users = [];
@@ -10,14 +10,14 @@ const users = [];
 // signup API
 app.post("/signup",function(req,res){
    
-    const name = req.body.username;
+    const username = req.body.username;
     const password = req.body.password;
 
     users.push({
-        name: name,
+        username: username,
         password:password
     })
-
+        
     res.status(200).json({
         msg:"you are registered"
     })
@@ -27,17 +27,19 @@ app.post("/signin",function(req,res){
 
     let foundUser = null;
 
-     const name = req.body.username;
+     const username = req.body.username;
      const password = req.body.password;
     
-    for(let i = 0 ; i<=users.length;i++){
-        if(users[i].name == name && users[i].password == password){
+    for(let i = 0 ; i<users.length;i++){
+        if(users[i].username == username && users[i].password == password){
             foundUser = users[i];
         }
     }
-   if(foundUser){
-    const token = generateToken();
-    foundUser.token = token;
+      if(foundUser){
+    const token = JWT.sign({
+        username: username
+    },JWT_SECRET);
+
     res.json({
         token: token
     })
@@ -52,10 +54,13 @@ app.post("/signin",function(req,res){
 
 app.get("/me" , function(req,res){
     const token = req.headers.token;
+    const decodededinfo = JWT.verify(token , JWT_SECRET)
+    const username = decodededinfo.username;
+
     let getuser = [];                // to store the username ans password in this variable
 
-    for(let i = 0 ; i<=users.length;i++){
-        if(users[i].token == token){
+    for(let i = 0 ; i<users.length;i++){
+        if(users[i].username == username){
             getuser = users[i];
         }   
     }  
@@ -72,3 +77,8 @@ app.get("/me" , function(req,res){
 })
 
 app.listen(3000);
+
+
+
+
+
