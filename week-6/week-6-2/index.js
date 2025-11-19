@@ -6,6 +6,10 @@ JWT_SECRET = "pass1212";
 const users = [];
 app.use(express.json());
 
+app.get("/", function(req,res){
+    res.sendFile(__dirname + "/public/index.html")
+})
+
 
 app.post("/signup" , function(req,res){
     const username = req.body.username;
@@ -70,7 +74,7 @@ app.get("/me", auth , function(req,res){
     let getUser = null;
 
     for(let i = 0; i<users.length;i++){
-        if(users[i].username = req.username){
+        if(users[i].username == req.username){
             getUser = users[i];
         }
     }
