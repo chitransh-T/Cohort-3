@@ -2,14 +2,15 @@ const express = require("express");
 const app = express();
 const jwt = require("jsonwebtoken")
 JWT_SECRET = "pass1212";
+const cors = require("cors");
 
 const users = [];
 app.use(express.json());
 
-app.get("/", function(req,res){
-    res.sendFile(__dirname + "/public/index.html")
-})
-
+// app.get("/", function(req,res){
+//     res.sendFile(__dirname + "/public/index.html")
+// })
+app.use(cors());
 
 app.post("/signup" , function(req,res){
     const username = req.body.username;
