@@ -1,94 +1,134 @@
-const express = require("express");
-const {TodoModel , UserModel} = require("./db")
-const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose")
+    const bcrypt = require("bcrypt");
+    const express = require("express");
+    const {TodoModel , UserModel} = require("./db")
+    const jwt = require("jsonwebtoken");
+    const mongoose = require("mongoose")
+    const { z } = require("zod");
+    mongoose.connect("mongodb+srv://admin:5qweMbXfjFMwCp9k@democluster.gs2nv4b.mongodb.net/Todo-DB")
+    const cors = require("cors")
+    const JWT_SECRET = "pass1212";
+    const authMiddle = require("./auth");
+    const app = express();
+    app.use(express.json());
+    app.use(cors());
 
-mongoose.connect("mongodb+srv://admin:5qweMbXfjFMwCp9k@democluster.gs2nv4b.mongodb.net/Todo-DB")
+    app.post("/signup" , async function(req,res){
 
-const JWT_SECRET = "pass1212";
-const app = express();
-app.use(express.json());
-
-
-app.post("/signup" , async function(req,res){
-    const email = req.body.email;
-    const password = req.body.password;
-    const name =  req.body.name;
-
-  await  UserModel.create({
-        email: email,
-        password: password,
-        name: name
+    const requireBody = z.object({
+        email: z.string().min(3).max(100).email(),
+        name: z.string().min(4).max(100),
+        password: z.string().min(5).max(40)
     })
 
-    res.json({
-        msg: "you are signed up"
+    const parsedDataWithSuccess = requireBody.safeParse(req.body)
+
+    if(!parsedDataWithSuccess){
+        res.json({
+            message: "Incorrect format",
+            error: parsedDataWithSuccess.error
+        })
+        return
+    }
+        const email = req.body.email;
+        const password = req.body.password;
+        const name =  req.body.name;
+
+        const hashedPassword = await bcrypt.hash(password , 5);
+
+        await  UserModel.create({
+            email: email,
+            password: hashedPassword,
+            name: name
+        }) 
+        
     })
-})
 
-app.post("/signin" , async function(req,res){
-     const email = req.body.email;
-     const password = req.body.password;
+    app.post("/signin" , async function(req,res){
+        const email = req.body.email;
+        const password = req.body.password;
 
-    const user = await UserModel.findOne({
-        email: email,
-        password: password
-     })
+        const user = await UserModel.findOne({
+            email: email
+        })
+            if(!user){
+                res.status(403).json({
+                    message: "user does not exist"
+                })
+            }
+            const passwordMatch = await bcrypt.compare(password, user.password);
 
-     if(user){
-        const token = jwt.sign({
-            id: user._id.toString()
-        }, JWT_SECRET)
+        if(passwordMatch){
+            const token = jwt.sign({
+                id: user._id.toString()
+            }, JWT_SECRET)
+
+            res.json({
+                token: token
+            })
+        }else{
+            res.send({
+                msg: "invalid username and password"
+            })
+        }
+    })
+
+
+    app.post("/todo" , authMiddle, async function(req,res){
+        const userId = req.userId;
+        const title = req.body.title;
+        const done = req.body.done;
+
+        await TodoModel.create({
+            userId: userId,
+            title: title,
+            done: done
+        })
 
         res.json({
-            token: token
+            msg: "todo created"
         })
-     }else{
-        res.send({
-            msg: "invalid username and password"
-        })
-     }
-})
-function authMiddle(req,res,next){
-    const token = req.headers.token;
-    const decodedData = jwt.verify(token, JWT_SECRET);
+    })
 
-    if(decodedData){
-        req.userId = decodedData.Id;
-        next();
-    }else{
-        res.status(403).json({
-            msg: "Incorrect credentials"
-        })
-    }  
-}
+    // app.get("/todos" ,authMiddle, async function(req,res){
+    //      const userId = req.userId;
+    
+    //      const todos = await TodoModel.findOne({
+    //         userId: userId
+    //      })
+    //     res.json({
+    //        todos
+    //     })
+    // })
+    app.get("/todos", authMiddle, async function(req, res) {
+        const userId = req.userId;
 
+        const todos = await TodoModel.find({
+            userId: userId
+        });
 
-app.post("/todo" , authMiddle, async function(req,res){
+        res.json(todos);   // ✅ return array directly
+    });
+
+ app.delete("/todo/:id" , authMiddle ,async function(req,res){
     const userId = req.userId;
-    const title = req.body.title;
-    const done = req.body.done;
+    const todoId = req.params.id;
 
-    await TodoModel.create({
-         userId: userId,
-        title: title,
-        done: done
-    })
-
-    res.json({
-        msg: "todo created"
-    })
-})
-
-app.get("/todos" ,authMiddle, async function(req,res){
-     const userId = req.userId;
-   
-     const todos = await TodoModel.findOne({
+    const todo = await TodoModel.findOne({
+        _id: todoId,
         userId: userId
-     })
-    res.json({
-       todos
     })
-})
+        if(todo){
+            await TodoModel.deleteOne({_id: todoId,userId:userId })
+            res.json({
+                msg: "todo deleted"
+            })
+        }else{
+            return res.status(404).json({
+        msg: "Not allowed or Todo not found"
+    });
+        }
 
-app.listen(3000);
+ })
+
+    app.listen(3000);
+  

@@ -3,15 +3,16 @@ const Schema = mongoose.Schema;
 const ObjectId = mongoose.ObjectId;
 
 const User = new Schema({
-    email: String,
+    email: {type: String , unique: true},
     password: String,
     name: String,
 })
 
 const Todo = new Schema({
+    userId: ObjectId,
     title: String,
-    done: Boolean,
-    userId: ObjectId
+    done: Boolean
+    
 
 })
 

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo</title>
+    
+</head>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+     async function signup(){
+           const email = document.getElementById("username-signup").value;
+            const password = document.getElementById("password-signup").value;
+            const name = document.getElementById("name").value;
+         await axios.post("http://localhost:3000/signup",{
+                email,
+                password,
+                name
+            })
+            
+            alert("you are signed up");
+
+    }
+
+    async function signin(){
+        const email = document.getElementById("username-signin").value;
+        const password = document.getElementById("password-signin").value;
+
+        const response = await axios.post("http://localhost:3000/signin",{
+            email,
+            password
+         })
+
+         localStorage.setItem("token", response.data.token);
+         updateUi();
+         gettodo();
+         alert("you are signed in");
+         
+    }
+    
+    window.onload = function() {
+    updateUi();
+};
+
+
+    function logout() {
+        localStorage.removeItem("token");
+        updateUi();
+    }
+
+ async function addtodo(){
+    const title = document.getElementById("addtodo").value;
+    const done = false;
+
+    await axios.post("http://localhost:3000/todo", {
+        title,
+        done
+    }, {
+        headers: {
+            "token": localStorage.getItem("token")
+        }
+    });
+
+    updateUi();
+    gettodo();
+
+}
+
+    async function gettodo(){
+        const response = await axios.get("http://localhost:3000/todos",{
+            headers:{
+                "token": localStorage.getItem("token")
+            }
+        })
+
+        const todos = response.data;
+        document.getElementById("todos").innerHTML = todos.map(t => `
+  <p>
+    ${t.title} 
+    <button onclick="deleteTodo('${t._id}')">Delete</button>
+  </p>
+`).join("");
+
+     
+    }
+
+    async function deleteTodo(id){
+        await axios.delete(`http://localhost:3000/todo/${id}`,{
+            headers:{
+                "token": localStorage.getItem("token")
+            }
+        })
+
+        alert("todo deleted");
+        gettodo();
+    }
+
+    function updateUi(){
+        const token = localStorage.getItem("token");
+
+        if(token){
+            document.getElementById("signup-section").style.display = "none";
+            document.getElementById("signin-section").style.display = "none";
+            document.getElementById("logout").style.display="block";
+            document.getElementById("addtodo").style.display = "block";
+            document.getElementById("addbtn").style.display = "block"
+            
+        }else{
+              document.getElementById("signup-section").style.display = "block";
+              document.getElementById("signin-section").style.display = "block";
+              document.getElementById("logout").style.display="none";
+              document.getElementById("todos").innerHTML = "";
+              document.getElementById("addtodo").style.display = "none";
+              document.getElementById("addbtn").style.display = "none";
+        }
+    }
+    </script>
+    
+<body>
+    <div id="signup-section">
+   <h1>SignUp</h1> 
+    <h3>username <input id="username-signup" placeholder="username" type="text"></h3>
+    <h3> password <input id="password-signup" placeholder="password" type="text"></h3>
+      <h3> name <input id="name" placeholder="name" type="text"></h3>
+    <button onclick="signup()">Signup</button>
+  </div>
+  <div id="signin-section">
+    <h1>SignIn</h1> 
+    <h3>username <input id="username-signin" placeholder="username" type="text"></h3>
+    <h3> password <input id="password-signin" placeholder="password" type="text"></h3>
+    <button onclick="signin()">SignIn</button>
+  </div> 
+  
+   <div style="display: flex;">
+        <input id="addtodo" type="text">
+      
+        <button id="addbtn" onclick="addtodo()">add</button>
+    </div>
+          <div id="todos"></div>
+
+    
+
+    <button id="logout" onclick="logout()">Logout</button>
+
+</body>
+</html>
